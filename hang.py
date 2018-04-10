@@ -36,10 +36,14 @@ def isWordGuessed(secretWord, lettersGuessed):
 
     return True
 
-def getGuessedWord():
-
+def getGuessedWord(secretWord, lettersGuessed):
      guessed = ''
 
+     for letter in secretWord:
+         if letter in lettersGuessed:
+             guessed += letter
+         else:
+             guessed += '_ '
 
      return guessed
 
@@ -71,35 +75,22 @@ def hangman(secretWord):
         letter = raw_input('Please guess a letter: ')
         if letter in lettersGuessed:
 
-            guessed = getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = getGuessedWord(secretWord, lettersGuessed)
 
             print 'Oops! You have already guessed that letter: ', guessed
         elif letter in secretWord:
             lettersGuessed.append(letter)
 
-            guessed = getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = getGuessedWord(secretWord, lettersGuessed)
+
 
             print 'Good Guess: ', guessed
         else:
             guesses -=1
             lettersGuessed.append(letter)
 
-            guessed = getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = getGuessedWord(secretWord, lettersGuessed)
+
 
             print 'Oops! That letter is not in my word: ',  guessed
         print '------------'
