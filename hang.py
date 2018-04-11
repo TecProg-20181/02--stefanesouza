@@ -2,7 +2,7 @@ import random
 import string
 
 WORDLIST_FILENAME = "palavras.txt"
-GUESSES = 8
+GUESSES_NUMBER = 8
 
 def load_words_list():
     in_file = open(WORDLIST_FILENAME, 'r', 0)
@@ -19,16 +19,12 @@ def inicial_message():
     filelist = load_words_list()
     print "  ", len(filelist), "words loaded."
 
-
 def word_guessed(secret_word, letters_guessed):
-    secretLetters = []
-
     for letter in secret_word:
         if letter in letters_guessed:
             pass
         else:
             return False
-
     return True
 
 def get_guessed_word(secret_word, letters_guessed):
@@ -43,12 +39,15 @@ def get_guessed_word(secret_word, letters_guessed):
      return guessed
 
 def get_available_letters():
-    # 'abcdefghijklmnopqrstuvwxyz'
     available = string.ascii_lowercase
-
-
     return available
 
+def clean_letters(letters_guessed):
+    letters = get_available_letters()
+    for letter in letters:
+        if letter in letters_guessed:
+            letters = letters.replace(letter, '')
+    return letters
 
 def welcome_game(secret_word):
     print 'Welcome to the game, Hangam!'
@@ -58,21 +57,17 @@ def welcome_game(secret_word):
 def hangman():
     word_list = load_words_list()
     secret_word = random_words(word_list)
-
-    guesses = 8
+    guesses = GUESSES_NUMBER
     letters_guessed = []
 
     welcome = welcome_game(secret_word)
 
-    while  word_guessed(secret_word, letters_guessed) == False and guesses >0:
+    while  word_guessed(secret_word, letters_guessed) == False and guesses > 0:
+        letters = clean_letters(letters_guessed)
+
         print 'You have ', guesses, 'guesses left.'
 
-        available = get_available_letters()
-        for letter in available:
-            if letter in letters_guessed:
-                available = available.replace(letter, '')
-
-        print 'Available letters', available
+        print 'Available letters', letters
         letter = raw_input('Please guess a letter: ')
         if letter in letters_guessed:
 
