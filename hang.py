@@ -4,102 +4,103 @@ import string
 WORDLIST_FILENAME = "palavras.txt"
 GUESSES = 8
 
-def loadWords():
-    inFile = open(WORDLIST_FILENAME, 'r', 0)
-    line = inFile.readline()
-    wordlist = string.split(line)
-    return wordlist
+def load_words_list():
+    in_file = open(WORDLIST_FILENAME, 'r', 0)
+    line = in_file.readline()
+    word_list = string.split(line)
+    return word_list
 
-def randomWords(wordlist):
-    secretWord = random.choice(wordlist).lower()
-    return secretWord
+def random_words(word_list):
+    secret_word = random.choice(word_list).lower()
+    return secret_word
 
-def inicialMessage():
+def inicial_message():
     print "Loading word list from file..."
-    filelist = loadWords()
+    filelist = load_words_list()
     print "  ", len(filelist), "words loaded."
 
 
-def isWordGuessed(secretWord, lettersGuessed):
+def word_guessed(secret_word, letters_guessed):
     secretLetters = []
 
-    for letter in secretWord:
-        if letter in lettersGuessed:
+    for letter in secret_word:
+        if letter in letters_guessed:
             pass
         else:
             return False
 
     return True
 
-def getGuessedWord(secretWord, lettersGuessed):
+def get_guessed_word(secret_word, letters_guessed):
      guessed = ''
 
-     for letter in secretWord:
-         if letter in lettersGuessed:
+     for letter in secret_word:
+         if letter in letters_guessed:
              guessed += letter
          else:
              guessed += '_ '
 
      return guessed
 
-def getAvailableLetters():
+def get_available_letters():
     # 'abcdefghijklmnopqrstuvwxyz'
     available = string.ascii_lowercase
 
 
     return available
 
-def welcome_game(secretWord):
+
+def welcome_game(secret_word):
     print 'Welcome to the game, Hangam!'
-    print 'I am thinking of a word that is', len(secretWord), ' letters long.'
+    print 'I am thinking of a word that is', len(secret_word), ' letters long.'
     print '-------------'
 
 def hangman():
-    wordlist = loadWords()
-    secretWord = randomWords(wordlist)
+    word_list = load_words_list()
+    secret_word = random_words(word_list)
 
     guesses = 8
-    lettersGuessed = []
+    letters_guessed = []
 
-    welcome = welcome_game(secretWord)
+    welcome = welcome_game(secret_word)
 
-    while  isWordGuessed(secretWord, lettersGuessed) == False and guesses >0:
+    while  word_guessed(secret_word, letters_guessed) == False and guesses >0:
         print 'You have ', guesses, 'guesses left.'
 
-        available = getAvailableLetters()
+        available = get_available_letters()
         for letter in available:
-            if letter in lettersGuessed:
+            if letter in letters_guessed:
                 available = available.replace(letter, '')
 
         print 'Available letters', available
         letter = raw_input('Please guess a letter: ')
-        if letter in lettersGuessed:
+        if letter in letters_guessed:
 
-            guessed = getGuessedWord(secretWord, lettersGuessed)
+            guessed = get_guessed_word(secret_word, letters_guessed)
 
             print 'Oops! You have already guessed that letter: ', guessed
-        elif letter in secretWord:
-            lettersGuessed.append(letter)
+        elif letter in secret_word:
+            letters_guessed.append(letter)
 
-            guessed = getGuessedWord(secretWord, lettersGuessed)
+            guessed = get_guessed_word(secret_word, letters_guessed)
 
 
             print 'Good Guess: ', guessed
         else:
             guesses -=1
-            lettersGuessed.append(letter)
+            letters_guessed.append(letter)
 
-            guessed = getGuessedWord(secretWord, lettersGuessed)
+            guessed = get_guessed_word(secret_word, letters_guessed)
 
 
             print 'Oops! That letter is not in my word: ',  guessed
         print '------------'
 
     else:
-        if isWordGuessed(secretWord, lettersGuessed) == True:
+        if word_guessed(secret_word, letters_guessed) == True:
             print 'Congratulations, you won!'
         else:
-            print 'Sorry, you ran out of guesses. The word was ', secretWord, '.'
+            print 'Sorry, you ran out of guesses. The word was ', secret_word, '.'
 
 
 hangman()
