@@ -48,10 +48,17 @@ def clean_letters(letters_guessed):
             letters = letters.replace(letter, '')
     return letters
 
+def different_letters(secret_word):
+    different_list = set(list(secret_word))
+    return len(different_list)
+
 def welcome_game(secret_word):
+    different_list = different_letters(secret_word)
+
     print '\n-------------------------------------'
     print '    WELCOME TO THE GAME, HANGAM!'
-    print 'I am thinking of a word that is', len(secret_word), ' letters long.'
+    print 'I am thinking of a word that is', len(secret_word), 'letters long.'
+    print 'And it has ', different_list, ' different letters.'
     print '-------------------------------------\n'
 
 def hangman():
@@ -60,6 +67,8 @@ def hangman():
     guesses = GUESSES_NUMBER
     letters_guessed = []
     welcome = welcome_game(secret_word)
+    different_list = different_list = different_letters(secret_word)
+
 
     while  word_guessed(secret_word, letters_guessed) == False and guesses > 0:
         letters = clean_letters(letters_guessed)
@@ -67,7 +76,13 @@ def hangman():
         print '   ATTENTION: You have ', guesses, 'guesses left.'
         print ' Available letters: ', letters
 
+        if different_list > guesses:
+            print 'You are almost without guesses! You can choose another word, insert 1.'
+
         letter = raw_input('\n Please guess a letter: ')
+
+        if letter == '1':
+            hangman()
 
         if letter in letters_guessed:
             guessed = get_guessed_word(secret_word, letters_guessed)
@@ -90,6 +105,7 @@ def hangman():
             print 'Congratulations, you won!\n'
         else:
             print 'Sorry, you ran out of guesses. The word was ', secret_word, '.\n'
+            quit()
 
 def play_game():
     inicial_message()
